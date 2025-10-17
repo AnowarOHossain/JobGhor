@@ -1,21 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Button from '../components/ui/Button'
-import api from '../services/api'
+import AIJobSearch from '../components/AIJobSearch'
 
 export default function Home() {
   const [recs, setRecs] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    let mounted = true
-    setLoading(true)
-    api.post('/api/recommendations', { title: 'Software Engineer', skills: ['React', 'Node'] })
-      .then(res => { if (mounted) setRecs(res.data?.items || []) })
-      .catch(err => setError(err?.response?.data?.message || err.message))
-      .finally(() => setLoading(false))
-    return () => { mounted = false }
-  }, [])
 
   return (
     <section className="py-8 sm:py-14">
@@ -27,6 +15,9 @@ export default function Home() {
         <div className="mt-8 flex items-center justify-center gap-3">
           <a href="/jobs"><Button>Browse Jobs</Button></a>
           <a href="/profile"><Button variant="outline">Build Profile</Button></a>
+        </div>
+        <div className="mt-6">
+          <AIJobSearch onResults={setRecs} />
         </div>
       </div>
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -46,20 +37,19 @@ export default function Home() {
 
       <div className="mt-12 space-y-3">
         <h2 className="heading-2">Recommended for you</h2>
-        {loading && <p className="muted">Loading recommendations…</p>}
-        {error && <p className="text-red-600">{error}</p>}
-        {!loading && !error && (
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recs.map((r) => (
-              <li key={r.id} className="card">
-                <div className="card-body">
-                  <h3 className="text-lg font-semibold">{r.title}</h3>
-                  <p className="muted text-sm">{r.company} • {r.location}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {recs.map((r) => (
+            <li key={r.id} className="card">
+              <div className="card-body">
+                <h3 className="text-lg font-semibold">{r.title}</h3>
+                <p className="muted text-sm">{r.company} • {r.location}</p>
+                {typeof r.matchScore === 'number' && (
+                  <p className="text-xs mt-1 text-brand-700 dark:text-brand-300">Match score: {r.matchScore}%</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

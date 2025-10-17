@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import Container from './ui/Container'
 import ThemeToggle from './ThemeToggle'
+import { useAuth } from '../context/AuthContext.jsx'
 
 const navLinkClass = ({ isActive }) =>
   `px-3 py-2 rounded-md text-sm font-medium ${
@@ -8,6 +9,7 @@ const navLinkClass = ({ isActive }) =>
   }`
 
 export default function Navbar() {
+  const { token, role, logout } = useAuth()
   return (
     <header className="border-b border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-950/60 backdrop-blur sticky top-0 z-40">
       <Container className="h-16 flex items-center justify-between">
@@ -19,15 +21,30 @@ export default function Navbar() {
           <NavLink to="/jobs" className={navLinkClass}>
             Jobs
           </NavLink>
-          <NavLink to="/profile" className={navLinkClass}>
-            Profile
-          </NavLink>
-          <NavLink to="/admin" className={navLinkClass}>
-            Admin
-          </NavLink>
-          <NavLink to="/login" className={navLinkClass}>
-            Login
-          </NavLink>
+          {token && (
+            <NavLink to="/profile" className={navLinkClass}>
+              Profile
+            </NavLink>
+          )}
+          {role === 'admin' && (
+            <>
+              <NavLink to="/admin" className={navLinkClass}>
+                Admin
+              </NavLink>
+              <NavLink to="/admin/post-job" className={navLinkClass}>
+                Post Job
+              </NavLink>
+            </>
+          )}
+          {token ? (
+            <button onClick={logout} className={navLinkClass({ isActive: false })}>
+              Logout
+            </button>
+          ) : (
+            <NavLink to="/login" className={navLinkClass}>
+              Login
+            </NavLink>
+          )}
           <ThemeToggle />
         </nav>
       </Container>
