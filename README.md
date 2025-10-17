@@ -105,6 +105,8 @@ JobGhor/
 
 ## Getting Started
 
+<!-- MongoDB setup guide removed as per request -->
+
 ### 1) Clone the repository
 ```powershell
 git clone https://github.com/AnowarOHossain/JobGhor.git
@@ -115,9 +117,11 @@ cd JobGhor
 ```powershell
 cd server
 npm install
-# Copy environment file and edit values
-copy .env.example .env
-# Edit .env to set: PORT, MONGODB_URI, JWT_SECRET, DEFAULT_AI_MODEL, GEMINI_API_KEY
+
+# Create .env if missing (edit values as needed)
+if (!(Test-Path .env)) { New-Item -Path .env -ItemType File | Out-Null }
+"PORT=5000`nJWT_SECRET=dev-secret`nDEFAULT_AI_MODEL=claude-sonnet-4.5`n# MONGODB_URI=mongodb://127.0.0.1:27017/jobghor`n# GEMINI_API_KEY=your-key" | Out-File -FilePath .env -Encoding utf8
+
 npm run dev
 ```
 
@@ -144,6 +148,17 @@ cd client
 npm run build
 npm run preview
 ```
+
+---
+
+## Run URLs
+
+- Frontend (Vite): http://localhost:5173
+- Backend API base: http://localhost:5000
+	- Health check: http://localhost:5000/api/health
+	- Jobs: http://localhost:5000/api/jobs
+
+If you see a preview error, first run `npm run build` before `npm run preview`. For development, use `npm run dev`.
 
 ---
 

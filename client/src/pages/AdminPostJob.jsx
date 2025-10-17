@@ -2,9 +2,12 @@ import { useState, useMemo } from 'react'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
 import { useAuth } from '../context/AuthContext.jsx'
+import api from '../services/api'
+import { useNavigate } from 'react-router-dom'
 
 export default function AdminPostJob() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const autoCompany = useMemo(() => user?.company || user?.name || '', [user])
 
   const [title, setTitle] = useState('')
@@ -18,6 +21,7 @@ export default function AdminPostJob() {
   const [deadline, setDeadline] = useState('')
   const [contactMethod, setContactMethod] = useState('') // email or URL
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const requiredMissing = () => {
     if (!title?.trim()) return 'Job Title is required'
@@ -32,7 +36,7 @@ export default function AdminPostJob() {
     return ''
   }
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     const miss = requiredMissing()
     if (miss) { setError(miss); return }
@@ -55,11 +59,17 @@ export default function AdminPostJob() {
       contact: contactMethod.trim(),
       company: autoCompany,
     }
-    // TODO: call POST /api/jobs
-    console.log('POST /api/jobs', payload)
-    alert('Job posted (demo). Implement API call next.')
-    // reset minimal fields
-    setTitle(''); setDescription(''); setLocation(''); setSalaryMin(''); setSalaryMax(''); setSkills(''); setDeadline(''); setContactMethod('')
+    try {
+      setLoading(true)
+      const res = await api.post('/api/jobs', payload)
+      // success -> go to jobs list or job details
+      navigate('/jobs')
+    } catch (err) {
+      const msg = err?.response?.data?.message || err.message || 'Failed to post job'
+      setError(msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -139,7 +149,7 @@ export default function AdminPostJob() {
 
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
-        <Button type="submit">Publish Job</Button>
+        <Button type="submit" disabled={loading}>{loading ? 'Publishing…' : 'Publish Job'}</Button>
       </form>
     </div>
   )

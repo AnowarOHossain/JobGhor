@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
 import { useAuth } from '../context/AuthContext.jsx'
 import { Card, CardBody } from '../components/ui/Card'
+import api from '../services/api'
 
 function RoleCard({ icon, title, desc, onSignIn, onCreate }) {
   return (
@@ -34,6 +35,8 @@ export default function Login() {
   const [role, setRole] = useState('user') // 'user' | 'admin'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const startSignIn = (r) => {
     setRole(r)
@@ -44,14 +47,22 @@ export default function Login() {
     navigate(`/register?role=${r}`)
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    // Demo-only: simulate login. Replace with real API call.
-    login({
-      token: 'demo-token',
-      user: { id: 'u1', name: email.split('@')[0] || 'User', role },
-    })
-    window.location.href = '/'
+    setError('')
+    setLoading(true)
+    try {
+      const res = await api.post('/api/auth/login', { emailOrName: email, password })
+      const { token, user } = res.data || {}
+      if (!token || !user) throw new Error('Invalid response')
+      login({ token, user })
+      navigate('/')
+    } catch (err) {
+      const msg = err?.response?.data?.message || err.message || 'Failed to sign in'
+      setError(msg)
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (mode === 'pick') {
@@ -95,7 +106,8 @@ export default function Login() {
       <form className="space-y-3" onSubmit={onSubmit}>
         <Input type="text" placeholder="Name/Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <Button className="w-full" type="submit">Sign in</Button>
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+        <Button className="w-full" type="submit" disabled={loading}>{loading ? 'Signing in…' : 'Sign in'}</Button>
       </form>
       <div className="mt-3 text-sm">
         <span className="muted">New here?</span>{' '}

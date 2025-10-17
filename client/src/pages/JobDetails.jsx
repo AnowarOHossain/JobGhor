@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from '../services/api'
 import Button from '../components/ui/Button'
+import { useNavigate } from 'react-router-dom'
 
 export default function JobDetails() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [job, setJob] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -31,7 +33,7 @@ export default function JobDetails() {
       <div className="prose dark:prose-invert max-w-none">
         <p>{job.description}</p>
       </div>
-      <Button className="mt-2">Apply</Button>
+      <Button className="mt-2" onClick={() => navigate(`/apply?jobId=${id}`)}>Apply</Button>
     </article>
   )
 }
