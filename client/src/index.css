@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
   --bg: 255 255 255;
@@ -10,27 +10,129 @@
   --muted: 107 114 128; /* gray-500 */
   --brand: 29 116 255; /* brand-500 */
 }
-.dark :root {
+/* When dark mode class is applied to html, override variables */
+html.dark {
   --bg: 3 7 18; /* gray-950 */
   --fg: 243 244 246; /* gray-100 */
   --muted: 156 163 175; /* gray-400 */
 }
 
-@layer base {
-  html { font-family: theme('fontFamily.sans'); }
-  body { @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100; }
-  a { @apply text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300; }
+/* Base styles (no Tailwind @apply to avoid at-rule lint errors) */
+html {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+}
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+}
+html.dark body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+}
+a {
+  color: rgb(var(--brand));
+  text-decoration: none;
+}
+a:hover {
+  opacity: 0.9;
+}
+html.dark a {
+  color: rgb(var(--brand));
 }
 
-@layer components {
-  .container { @apply max-w-7xl mx-auto px-4; }
-  .card { @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-card; }
-  .card-body { @apply p-4 sm:p-6; }
-  .heading-1 { @apply text-3xl sm:text-4xl font-bold tracking-tight; }
-  .heading-2 { @apply text-2xl font-semibold; }
-  .muted { @apply text-gray-600 dark:text-gray-400; }
-  .btn { @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors; }
-  .btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; }
-  .btn-outline { @apply btn border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800; }
-  .input { @apply w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500; }
+/* Components */
+.container {
+  max-width: 80rem; /* ~1280px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+}
+html.dark .card {
+  background-color: #111827; /* gray-900 */
+  border-color: #1f2937; /* gray-800 */
+}
+.card-body {
+  padding: 1rem; /* 16px */
+}
+@media (min-width: 640px) {
+  .card-body { padding: 1.5rem; }
+}
+.heading-1 {
+  font-size: 1.875rem; /* text-3xl */
+  line-height: 2.25rem;
+  font-weight: 700; /* bold */
+  letter-spacing: -0.01em;
+}
+@media (min-width: 640px) {
+  .heading-1 { font-size: 2.25rem; line-height: 2.5rem; }
+}
+.heading-2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+.muted {
+  color: rgb(107 114 128); /* gray-600 */
+}
+html.dark .muted {
+  color: rgb(156 163 175); /* gray-400 */
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+.btn-primary {
+  background-color: rgb(var(--brand));
+  color: #ffffff;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+}
+.btn-outline {
+  border: 1px solid #d1d5db; /* gray-300 */
+  color: #1f2937; /* gray-800 */
+  background-color: transparent;
+}
+html.dark .btn-outline {
+  border-color: #374151; /* gray-700 */
+  color: #f3f4f6; /* gray-100 */
+}
+.btn-outline:hover {
+  background-color: #f9fafb; /* gray-50 */
+}
+html.dark .btn-outline:hover {
+  background-color: #1f2937; /* gray-800 */
+}
+.input {
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db; /* gray-300 */
+  background-color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+}
+html.dark .input {
+  border-color: #374151; /* gray-700 */
+  background-color: #111827; /* gray-900 */
+  color: #f3f4f6; /* gray-100 */
+}
+.input:focus {
+  outline: 2px solid rgb(var(--brand));
+  outline-offset: 1px;
 }
