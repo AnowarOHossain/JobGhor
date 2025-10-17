@@ -88,7 +88,7 @@ JobGhor/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/JobGhor.git
+git clone https://github.com/AnowarOHossain/JobGhor.git
 cd JobGhor
 ```
 
