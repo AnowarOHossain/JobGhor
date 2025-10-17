@@ -1,6 +1,22 @@
+import { useEffect, useState } from 'react'
 import Button from '../components/ui/Button'
+import api from '../services/api'
 
 export default function Home() {
+  const [recs, setRecs] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let mounted = true
+    setLoading(true)
+    api.post('/api/recommendations', { title: 'Software Engineer', skills: ['React', 'Node'] })
+      .then(res => { if (mounted) setRecs(res.data?.items || []) })
+      .catch(err => setError(err?.response?.data?.message || err.message))
+      .finally(() => setLoading(false))
+    return () => { mounted = false }
+  }, [])
+
   return (
     <section className="py-8 sm:py-14">
       <div className="text-center max-w-3xl mx-auto">
@@ -26,6 +42,24 @@ export default function Home() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-12 space-y-3">
+        <h2 className="heading-2">Recommended for you</h2>
+        {loading && <p className="muted">Loading recommendations…</p>}
+        {error && <p className="text-red-600">{error}</p>}
+        {!loading && !error && (
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {recs.map((r) => (
+              <li key={r.id} className="card">
+                <div className="card-body">
+                  <h3 className="text-lg font-semibold">{r.title}</h3>
+                  <p className="muted text-sm">{r.company} • {r.location}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   )
