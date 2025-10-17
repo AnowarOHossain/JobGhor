@@ -72,7 +72,16 @@ JobGhor/
 │       │   └── Register.jsx
 │       └── services/
 │           └── api.js
-├── server/                     # Node.js/Express backend (to be added)
+├── server/                     # Node.js/Express backend
+│   ├── package.json
+│   ├── server.js               # entry (loads env, starts app)
+│   └── src/
+│       ├── app.js              # Express app, middleware, routes
+│       ├── env.js              # env loading/defaults
+│       ├── routes/
+│       │   └── recommendations.js
+│       └── services/
+│           └── gemini.js       # Gemini integration
 └── README.md
 ```
 
@@ -89,6 +98,8 @@ JobGhor/
 - `GET /api/profile` — Get user profile
 - `PUT /api/profile` — Update user profile
 - `GET /api/recommendations` — AI-powered recommendations
+	- Implemented as `POST /api/recommendations` (accepts simple profile payload)
+	- `GET /api/health` — health-check
 
 ---
 
@@ -104,7 +115,9 @@ cd JobGhor
 ```powershell
 cd server
 npm install
-# Create .env with MONGODB_URI, JWT_SECRET, and any Gemini API keys
+# Copy environment file and edit values
+copy .env.example .env
+# Edit .env to set: PORT, MONGODB_URI, JWT_SECRET, DEFAULT_AI_MODEL, GEMINI_API_KEY
 npm run dev
 ```
 
