@@ -1,45 +1,41 @@
 # JobGhor
-**Simple solutions for job search**
+Simple solutions for job search
 
 ---
 
-JobGhor is a modern, full-stack job portal designed to connect job seekers and employers. It offers a streamlined platform for job postings, applications, profile management, and AI-powered job recommendations—all wrapped in a responsive, user-friendly interface.
+JobGhor is a modern MERN job portal that connects job seekers and employers. It provides job postings, search, applications, profile management, and AI-powered recommendations in a fast, responsive UI.
 
-> **This is a MERN stack project:**  
-> - **M**ongoDB  
-> - **E**xpress.js  
-> - **R**eact  
-> - **N**ode.js  
+> Stack: MongoDB • Express.js • React • Node.js
 
 ---
 
 ## Features
 
-- **User Authentication**: Secure registration, login, and JWT-based session management
-- **Job Posting & Management**: Employers can create, edit, and delete job listings
-- **Job Search & Application**: Job seekers can browse, search, and apply for jobs
-- **User Profiles**: Manage resumes, experiences, and profile details
-- **Application Tracking**: Track and manage job applications
-- **AI-powered Recommendations**: Personalized job suggestions via Gemini API
-- **Admin Dashboard**: Manage users, jobs, and moderate content
-- **Responsive Design**: Modern UI with Tailwind CSS, mobile-friendly
+- Authentication with JWT (login/register)
+- Job posting & management (employers)
+- Job search & applications (seekers)
+- User profiles (resume, experience, preferences)
+- Application tracking
+- AI-powered job recommendations (Gemini API)
+- Admin dashboard & moderation
+- Responsive design with Tailwind CSS, dark mode, and consistent design system
 
 ---
 
 ## Tech Stack
 
 ### Backend (`/server`)
-- **Node.js** & **Express.js**: RESTful API
-- **MongoDB** with **Mongoose**: NoSQL database and modeling
-- **JWT** & **bcrypt**: Authentication & password security
-- **Gemini API**: AI-powered job recommendations
+- Node.js & Express.js (REST API)
+- MongoDB with Mongoose
+- JWT & bcrypt for authentication/security
+- Gemini API integration (recommendations)
 
 ### Frontend (`/client`)
-- **React**: Component-based SPA
-- **Tailwind CSS**: Utility-first CSS framework
-- **Axios**: API requests
-- **React Router**: Routing & navigation
-- **Context API** or **Redux**: State management (as needed)
+- React + Vite (fast dev and build)
+- Tailwind CSS (utility-first styling, dark mode: class)
+- React Router (routing)
+- Axios (API client)
+- Reusable UI components (Button, Card, Input, Container, ThemeToggle)
 
 ---
 
@@ -47,24 +43,36 @@ JobGhor is a modern, full-stack job portal designed to connect job seekers and e
 
 ```
 JobGhor/
-├── client/   # React frontend
+├── client/                     # React frontend (Vite)
+│   ├── index.html
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   ├── vite.config.js
 │   └── src/
+│       ├── App.jsx
+│       ├── index.css
+│       ├── main.jsx
 │       ├── components/
+│       │   ├── Footer.jsx
+│       │   ├── Navbar.jsx
+│       │   ├── ThemeToggle.jsx
+│       │   └── ui/
+│       │       ├── Button.jsx
+│       │       ├── Card.jsx
+│       │       ├── Container.jsx
+│       │       └── Input.jsx
 │       ├── pages/
-│       ├── services/
-│       ├── hooks/
-│       ├── App.js
-│       └── index.js
-│   └── tailwind.config.js
-├── server/   # Node.js/Express backend
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middlewares/
-│   ├── utils/
-│   ├── app.js
-│   ├── server.js
-│   └── .env
+│       │   ├── AdminDashboard.jsx
+│       │   ├── Home.jsx
+│       │   ├── JobDetails.jsx
+│       │   ├── Jobs.jsx
+│       │   ├── Login.jsx
+│       │   ├── Profile.jsx
+│       │   └── Register.jsx
+│       └── services/
+│           └── api.js
+├── server/                     # Node.js/Express backend (to be added)
 └── README.md
 ```
 
@@ -86,46 +94,59 @@ JobGhor/
 
 ## Getting Started
 
-### 1. Clone the Repository
-```bash
+### 1) Clone the repository
+```powershell
 git clone https://github.com/AnowarOHossain/JobGhor.git
 cd JobGhor
 ```
 
-### 2. Setup Backend (`/server`)
-```bash
+### 2) Backend (server)
+```powershell
 cd server
 npm install
-# Configure MongoDB URI and JWT secret in .env
+# Create .env with MONGODB_URI, JWT_SECRET, and any Gemini API keys
 npm run dev
 ```
 
-### 3. Setup Frontend (`/client`)
-```bash
+### 3) Frontend (client)
+```powershell
 cd ../client
 npm install
 npm run dev
 ```
 
-Create a `.env` in `client/` (optional):
+Environment (optional) — `client/.env` (an `.env.example` is included):
 
 ```
 VITE_API_BASE=http://localhost:5000
-# Enables model header for backend AI features
+# Enables AI model header for backend features
 VITE_AI_MODEL=claude-sonnet-4.5
 ```
 
-The frontend automatically sends `x-ai-model: claude-sonnet-4.5` on all API requests (override with `VITE_AI_MODEL`).
+The frontend automatically sends `x-ai-model` on all API requests and defaults to `claude-sonnet-4.5` (override via `VITE_AI_MODEL`).
 
-### 4. (Optional) Configure Gemini API
-- Set up Gemini API credentials in the backend to enable AI-powered job recommendations.
+### 4) Build & preview frontend (optional)
+```powershell
+cd client
+npm run build
+npm run preview
+```
+
+---
+
+## Frontend Design System
+
+- Theme: brand blues (brand-500 = #1d74ff), neutral grays, dark mode support
+- Typography: Inter (Google Fonts)
+- Components: Button, Card, Input, Container
+- Layout: Navbar + Footer, centered content container
+- Dark Mode: toggle via ThemeToggle (stores preference in localStorage)
 
 ---
 
 ## Contribution
 
-We welcome contributions!  
-Please open issues or pull requests for new features, bug fixes, or suggestions.
+Contributions are welcome! Please open issues or pull requests for features, fixes, or discussions.
 
 ---
 
