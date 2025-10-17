@@ -8,10 +8,10 @@ const api = axios.create({
   },
 })
 
-// Ensure Claude Sonnet 4.5 is enabled for all client requests via a default header
+// Optionally include an AI model header if configured via VITE_AI_MODEL
 api.interceptors.request.use(config => {
-  const aiModel = import.meta.env.VITE_AI_MODEL || 'claude-sonnet-4.5'
-  config.headers['x-ai-model'] = aiModel
+  const aiModel = import.meta.env.VITE_AI_MODEL
+  if (aiModel) config.headers['x-ai-model'] = aiModel
   const token = localStorage.getItem('token')
   if (token) config.headers['Authorization'] = `Bearer ${token}`
   return config

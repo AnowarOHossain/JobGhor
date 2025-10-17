@@ -136,12 +136,9 @@ Environment (optional) — `client/.env` (an `.env.example` is included):
 
 ```
 VITE_API_BASE=http://localhost:5000
-# Enables AI model header for backend features
-VITE_AI_MODEL=claude-sonnet-4.5
-```
-
-The frontend automatically sends `x-ai-model` on all API requests and defaults to `claude-sonnet-4.5` (override via `VITE_AI_MODEL`).
-
+# If set, the frontend will send x-ai-model on API requests
+# VITE_AI_MODEL=gpt-4o | gemini-1.5-pro | etc.
+``` 
 ### 4) Build & preview frontend (optional)
 ```powershell
 cd client
